@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: document-parser
+
+kafka:
+  chunks:
+    bootstrap-servers: localhost:9092
+    group-id: ${KAFKA_APP_ID:document-parser}-${PROJECT:local}-${PROJECT_ENV:local}
+    response-timeout: ${KAFKA_RESPONSE_TIMEOUT:300ms}
+    retry-timeout: ${KAFKA_RETRY_TIMEOUT:300ms}
+    poll-timeout: ${KAFKA_POLL_TIMEOUT:400ms}
+    rollback: ${KAFKA_ROLLBACK:5}
+    max:
+      poll:
+        interval: ${KAFKA_MAX_POLL_INTERVAL:1800000}
+        records: ${KAFKA_MAX_POLL_RECORDS:1000}
+      partition-fetch-bytes: ${KAFKA_MAX_PARTITION_FETCH_BYTES:12485760}
+    topic:
+      consumer: ${KAFKA_DOCUMENT_CHUNKS_TOPIC:my.document.chunks}
+  txManager:
+    bootstrap-servers: ${KAFKA_TX_MANAGER_BOOTSTRAP_SERVERS:localhost:9092}
+    topic.producer: ${KAFKA_TX_MANAGER_TOPIC_PRODUCER:documents.tx-manager.events}
+    max.request-size: ${KAFKA_MAX_REQUEST_SIZE:31457280}
+  marking:
+    topic.producer: ${MARKING_COMMON_TOPIC_CONSUMER:cis.router.lightind}
+    max.request-size: ${KAFKA_MAX_REQUEST_SIZE:12485760}
+
+logging:
+  level:
+    ru.my.sample: debug
